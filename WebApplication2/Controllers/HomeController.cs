@@ -17,6 +17,10 @@ namespace WebApplication2.Controllers
 
         public IActionResult Index()
         {
+            HttpContext.Response.Cookies.Append("firstattemptdate", DateTime.Now.ToShortDateString());
+            HttpContext.Session.SetString("username", "sagar");
+            string username = HttpContext.Session.GetString("username");
+            ViewBag.Username = username;
             return View();
         }
 

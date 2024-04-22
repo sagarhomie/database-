@@ -37,4 +37,16 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+<script>
+    $(function () {
+        debugger;
+        $('#Name').on('keypress', function () {
+            var text = $('#Name').val();
+            if (text.length > 5) {
+                alert('name cannot be longer than 5 character');
+                $('#Name').val('');
+            }
+        })
+    });
+</script>
 

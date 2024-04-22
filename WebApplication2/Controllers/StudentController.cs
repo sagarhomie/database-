@@ -13,7 +13,8 @@ namespace WebApplication2.Controllers
         {
             return View();
         }
-        public IActionResult student() {
+        public IActionResult student()
+        {
 
             List<StudentModel> students = new List<StudentModel>();
             string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=SimpleadonetdemoDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;";
@@ -22,26 +23,27 @@ namespace WebApplication2.Controllers
             conn.Open();
             string command = "select * from Student";
             SqlCommand sqlCommand = new SqlCommand(command, conn);
-           // sqlCommand.ExecuteReader();
-           SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
-           DataTable dataTable= new DataTable();
-           adapter.Fill(dataTable);
-            foreach(DataRow student in dataTable.Rows) { 
-            StudentModel studentModel = new StudentModel();
-                studentModel.StudentId = Convert.ToInt32( student["StudentId"]);
-                studentModel.Name= student["Name"].ToString();
-                studentModel.Address= student["Address"].ToString();
-                studentModel.Semester = Convert.ToInt32( student["Semester"]);
-                studentModel.Marks =Convert.ToDecimal( student["Marks"]);
+            // sqlCommand.ExecuteReader();
+            SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            foreach (DataRow student in dataTable.Rows)
+            {
+                StudentModel studentModel = new StudentModel();
+                studentModel.StudentId = Convert.ToInt32(student["StudentId"]);
+                studentModel.Name = student["Name"].ToString();
+                studentModel.Address = student["Address"].ToString();
+                studentModel.Semester = Convert.ToInt32(student["Semester"]);
+                studentModel.Marks = Convert.ToDecimal(student["Marks"]);
                 students.Add(studentModel);
-                
+
             }
 
 
 
 
             return View(students);
-       
+
         }
         [HttpGet]
         public IActionResult CreateStudent()
@@ -56,29 +58,39 @@ namespace WebApplication2.Controllers
 
             try
             {
-                string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Simpleadonetdemo;Integrated Security=True;Connect Timeout=30;Encrypt=False;";
+                if (ModelState.IsValid)
+                {
+
+                    string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Simpleadonetdemo;Integrated Security=True;Connect Timeout=30;Encrypt=False;";
 
 
-                SqlConnection conn = new SqlConnection(connectionString);
-                conn.Open();
-                string command = "insert into Student" +
-                    "(\"Name\", \"Semester\", \"Marks\", \"Address\") Values"+
-                    " ('" + student.Name + "'," + student.Semester + "," +
-                    student.Marks + ",'" + student.Address + "')";
-                SqlCommand sqlCommand = new SqlCommand(command, conn);
-                sqlCommand.ExecuteNonQuery();
-                return RedirectToAction("student");
+                    SqlConnection conn = new SqlConnection(connectionString);
+                    conn.Open();
+                    string command = "insert into Student" +
+                        "(\"Name\", \"Semester\", \"Marks\", \"Address\") Values" +
+                        " ('" + student.Name + "'," + student.Semester + "," +
+                        student.Marks + ",'" + student.Address + "')";
+                    SqlCommand sqlCommand = new SqlCommand(command, conn);
+                    sqlCommand.ExecuteNonQuery();
+
+                    return RedirectToAction("student");
+                }
+                else
+                {
+                    return View(student);
+                }
+
             }
             catch (Exception ex)
 
             {
 
-               
+
                 return View(student);
             }
-         
 
-           
+
+
 
 
         }
@@ -86,12 +98,12 @@ namespace WebApplication2.Controllers
         public IActionResult EditStudent(int StudentId)
         {
 
-            StudentModel students = new  StudentModel();
+            StudentModel students = new StudentModel();
             string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=SushantDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;";
 
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
-            string command = "select * from Student where studentId= "+ StudentId;
+            string command = "select * from Student where studentId= " + StudentId;
             SqlCommand sqlCommand = new SqlCommand(command, conn);
             // sqlCommand.ExecuteReader();
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
@@ -99,13 +111,13 @@ namespace WebApplication2.Controllers
             adapter.Fill(dataTable);
             foreach (DataRow student in dataTable.Rows)
             {
-           
+
                 students.StudentId = Convert.ToInt32(student["StudentId"]);
                 students.Name = student["Name"].ToString();
                 students.Address = student["Address"].ToString();
                 students.Semester = Convert.ToInt32(student["Semester"]);
                 students.Marks = Convert.ToDecimal(student["Marks"]);
-               
+
 
             }
 
@@ -124,8 +136,8 @@ namespace WebApplication2.Controllers
 
                 SqlConnection conn = new SqlConnection(connectionString);
                 conn.Open();
-                string command = "Update Student set" +"\"Name\"='" + student.Name +
-                    "' where StudentId= " + student.StudentId;                    
+                string command = "Update Student set" + "\"Name\"='" + student.Name +
+                    "' where StudentId= " + student.StudentId;
                 SqlCommand sqlCommand = new SqlCommand(command, conn);
                 // sqlCommand.ExecuteReader();
                 sqlCommand.ExecuteNonQuery();
@@ -137,7 +149,7 @@ namespace WebApplication2.Controllers
             {
                 return View(student);
             }
-           
+
 
         }
         public IActionResult DeleteStudent(int StudentId)
@@ -150,7 +162,7 @@ namespace WebApplication2.Controllers
                 SqlConnection conn = new SqlConnection(connectionString);
                 conn.Open();
                 string command = "Delete Student where studentId=" + StudentId;
-                
+
                 SqlCommand sqlCommand = new SqlCommand(command, conn);
                 // sqlCommand.ExecuteReader();
                 sqlCommand.ExecuteNonQuery();

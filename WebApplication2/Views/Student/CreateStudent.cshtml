@@ -12,11 +12,11 @@
     <div class="col-md-4">
         <form asp-action="CreateStudent" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-          
-                
+
+
                 <input type="hidden" asp-for="StudentId" class="form-control" />
 
-       
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -47,4 +47,29 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+ <script>
+    $(function () {
+        $('#form').on('submit', function () {
+            var text = $('#Name').val();
+            if (text.length > 5) {
+                alert('name cannot be longer than 5 character');
+                $('#Name').val('');
+                return false;
+            }
+        });
+
+            $('#semester').on('keyup', function () {
+            var text = $('#semester').val();
+            if (text>8 || text<1) {
+                alert('semester should be less than 8');
+                $('#semester').val('');
+                return false;
+            }
+        }
+        );
+    });
+
+
+
+</script>
 
